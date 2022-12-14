@@ -1,9 +1,12 @@
 package viewmodel;
 
+
+
 import model.ProductItem;
 
 import java.sql.*;
 import java.util.ArrayList;
+
 
 import static config.SqlDB.DB_CONNECTION;
 import static config.sql_config_connection.SQL_PASSWORD;
@@ -36,10 +39,10 @@ public class AddProductViewModel {
     }
 
     private boolean addDB(ProductItem productItem) {
-        String qurey = null;
+
         try {
             Connection con = DriverManager.getConnection(DB_CONNECTION, SQL_USERNAME, SQL_PASSWORD);
-            qurey = "INSERT INTO product (product_name, product_price) VALUES (?, ?);";
+            String qurey = "INSERT INTO product (product_name, product_price) VALUES (?, ?);";
             PreparedStatement statement = con.prepareStatement(qurey);
             statement.setString(1, productItem.getProductName());
             statement.setDouble(2, productItem.getProductPrice());
