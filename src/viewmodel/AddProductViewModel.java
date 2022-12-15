@@ -4,6 +4,9 @@ package viewmodel;
 
 import model.ProductItem;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -16,7 +19,7 @@ public class AddProductViewModel {
 
     final ArrayList<ValidationObserver> validationObserverList = new ArrayList<>();
 
-    public void validateThenAdd(String product_name, String product_price) {
+    public void validateThenAdd(String product_name, String product_price, String path) {
         try
         {
             String name = product_name.trim();
@@ -26,6 +29,13 @@ public class AddProductViewModel {
                 notify_observers(false);
                 return;
             }
+            String pathDis;
+
+            if (!path.equals("")) {
+                pathDis = "product_images/" + name + ".png";
+
+                Files.copy(new File(path).toPath(), new File(pathDis).toPath());
+            }
 
             if (!addDB(new ProductItem(name, price)))
                 return;
@@ -34,6 +44,8 @@ public class AddProductViewModel {
 
         } catch (NumberFormatException e) {
             notify_observers(false);
+        } catch (IOException e) {
+            notify_observers(true);
         }
 
     }
